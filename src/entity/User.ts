@@ -3,6 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn, OneToMany
 } from "typeorm";
+import { Commentary } from "./Commentary";
 import { Project } from "./Project";
 
 @Entity()
@@ -25,6 +26,9 @@ export class User {
 
   @OneToMany( type => Project, project => project.user )
   projects: Project[];
+
+  @OneToMany( type => Commentary, comentary => comentary.user )
+  comentaries: Commentary[];
 
 }
 

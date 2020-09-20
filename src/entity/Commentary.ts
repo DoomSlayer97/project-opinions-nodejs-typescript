@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn, ManyToMany, ManyToOne, OneToMany
 } from "typeorm";
 import { Project } from "./Project";
+import { User } from "./User";
 
 @Entity()
 export class Commentary {
@@ -35,6 +36,9 @@ export class Commentary {
 
   @ManyToOne( type => Project, project => project.comentaries )
   project: Project;
+
+  @ManyToOne( type => User, user => user.comentaries )
+  user: User;
 
 }
 

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { User } from "../entity/User";
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 
 export const auth = async (req: Request, res: Response): Promise<Response> => {
   
@@ -24,11 +25,18 @@ export const auth = async (req: Request, res: Response): Promise<Response> => {
     message: "invalid_password"
   });
 
+  const token = jwt.sign({
+    id: findedUser.id,
+  }, "thisismysercretkey", {
+    expiresIn: 24 * 24 * 7
+  });
+
   findedUser.password = "";
   
   return res.status(201).json({
     message: "authenticated",
-    user: findedUser
+    user: findedUser,
+    token
   });
 
 }

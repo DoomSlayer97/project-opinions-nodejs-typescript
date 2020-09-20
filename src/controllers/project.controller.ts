@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { getConnection, getRepository } from "typeorm";
+import { getRepository } from "typeorm";
 import { Project } from "../entity/Project";
-import { User } from "../entity/User"
+import { User } from "../entity/User";
+import jwt from "jsonwebtoken";
 
 export const findAllCustom = async (req: Request, res: Response): Promise<Response> => {
 
@@ -15,13 +16,18 @@ export const create = async (req: Request, res: Response) : Promise<Response> =>
 
 	const {
 		name,
-		realeseDate,
-		userId
+		realeseDate
 	} : {
 			name: string,
 			realeseDate: Date,
 			userId: number
-	} = req.body;
+		} = req.body;
+	
+	const userData = jwt.decode(req.headers["authorization"] || "");
+	let userId = null;
+
+	if (userData instanceof Object)
+		userId = userData.id;
 
 	const newProject = new Project();
 
@@ -44,7 +50,9 @@ export const create = async (req: Request, res: Response) : Promise<Response> =>
 
 export const findAll = async (req: Request, res: Response) : Promise<Response> => {
 
-	const projects = await getRepository(Project).find();
+	const projects = await getRepository(Project).find({
+		relations: ["user"]
+	});
 
 	return res.json({
 		projects
