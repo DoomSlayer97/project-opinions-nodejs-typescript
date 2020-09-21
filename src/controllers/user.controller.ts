@@ -58,9 +58,16 @@ export const create = async (req: Request, res: Response) : Promise<Response> =>
 
   const createdUser = await getRepository(User).save(newUser);
 
+  const token = jwt.sign({
+    id: createdUser.id
+  }, "thisismysercretkey", {
+    expiresIn: 24 * 24 * 7
+  });
+
   return res.status(201).json({
     message: "created",
-    user: createdUser
+    user: createdUser,
+    token
   });
 
 }
