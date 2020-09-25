@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { Socket } from "socket.io";
 import { getRepository } from "typeorm";
 import { Commentary } from "../entity/Commentary";
 import { Project } from "../entity/Project";
